@@ -1,30 +1,29 @@
-# Ridge Regression, Lasso Regression
+# Linear Regression
 
 library(Ecdat)
 library(data.table)
 comp <- data.table(Computers)
 
-names(comp)
 
-# Using R
-naive_fit <- lm(price ~ ., data = comp)
-summary(naive_fit)
+# Using R (To Eventually Compare the Output)
+fit <- lm(price ~ ., data = comp)
+summary(fit)
 
 
-# Using Matrix Algebra
+# My Own Version
 # Beta = ((X'X)^-1) X'Y
 
-X = as.matrix(comp[, -c("price")])
+X = as.matrix(comp[, -"price"])
 
 # Transform Factors into dummy variables
-# Define function
+#  Define function
 getBool <- function(x) {
   if (x == "yes"){
     return(1)
   } else return(0)
 }
 
-# Vectorize function
+#  Vectorize function
 getBoolVectorized = Vectorize(getBool)
 
 types = sapply(comp, class) # get the class of each `comp` column
@@ -45,10 +44,11 @@ betas
 # they are the same as those from `lm`
 
 # Std. Errors
-# Calculate the error vector
+# Calculate the vector of residuals
 e = Y - (X %*% betas)
 stderr = sqrt(diag(as.numeric(var(e)) * solve((t(X) %*% X))))
 results = data.frame(coeffs = betas, std = stderr)
 results$t_value = abs(results$coeffs / results$std)
 
+results #exactly the same as those from `lm`
 
