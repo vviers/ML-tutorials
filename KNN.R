@@ -37,7 +37,7 @@ distance_each <- function(new_data, old_data){
   return(apply(old_data, MARGIN = 1, FUN = euclid_dist, v2 = new_data))
 }
 
-# we can now implement a classifying function
+# classifier function
 classify <- function(new_vec, k){
   neighb <- order(distance_each(new_vec, df_train[, c("x", "y")]),
                 decreasing = F)[1:k]
